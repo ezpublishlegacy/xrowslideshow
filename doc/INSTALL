@@ -1,0 +1,27 @@
+
+INSTALL EXTENSION
+
+* get extension from github
+* place it in your /extension directory or /ezpublish_legacy/extension
+* enable extension globally in settings/override/site.ini.append.php
+    [ExtensionSettings]
+    ActiveExtensions[]=xrowslideshow
+
+    * or per siteaccess in settings/siteaccess/<your_siteaccess_name>/site.ini.append.php
+        [ExtensionSettings]
+        ActiveAccessExtensions[]=xrowslideshow
+
+* design "standard" needs to be enabled for your siteaccess design.ini.append.php
+* clear caches
+
+OPTIONAL
+
+* enable xrowslideshow_responsive.css in your settings/.../design.ini.append.php for responsive behavior
+
+GETTING STARTED
+
+Example for implementing slideshow in JS:
+* xrowslideshow/design/standard/javascript/xrowslideshow.example.js
+
+Example template with HTML-Markup:
+* xrowslideshow/design/standard/templates/example_template.tpl

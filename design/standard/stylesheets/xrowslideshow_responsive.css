@@ -1,0 +1,43 @@
+@media only screen and (max-width: 819px)
+{
+    .xrowslideshow > div a
+    {
+        width: 0.3333%;
+    }
+}
+
+@media only screen and (max-width: 609px)
+{
+    .xrowslideshow > div a
+    {
+        width: 0.5%;
+    }
+    .xrowslideshow > div
+    {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+    .xrowslideshow .interaction .backward,
+    .xrowslideshow .interaction .forward
+    {
+        width: 30px;
+    }
+}
+
+@media only screen and (max-width: 399px)
+{
+    .xrowslideshow > div a
+    {
+        width: 1%;
+    }
+    .xrowslideshow > div
+    {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    .xrowslideshow .interaction .backward,
+    .xrowslideshow .interaction .forward
+    {
+        width: 20px;
+    }
+}

@@ -1,0 +1,67 @@
+.xrowslideshow .interaction
+{
+    display: block;
+    position: relative;
+}
+
+.xrowslideshow .interaction .backward
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.xrowslideshow .interaction .forward
+{
+    top: 0;
+    right: 0;
+    position: absolute;
+}
+
+.xrowslideshow > div
+{
+    overflow: hidden;
+    margin: 10px 45px;
+    padding: 0;
+}
+
+.xrowslideshow > div > div
+{
+    top: 0;
+    position: relative;
+    width: 10000%;
+}
+
+.xrowslideshow > div a
+{
+    display: block;
+    float: left;
+    width: 0.25%;
+}
+
+.xrowslideshow
+{
+    position: relative;
+}
+
+.xrowslideshow .interaction .backward,
+.xrowslideshow .interaction .forward
+{
+    background-position: center center;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    width: 45px;
+    height: 110px;
+    filter: none !important;
+}
+
+.xrowslideshow .backward
+{
+    background-image: url(../images/arrow-left.svg);
+}
+
+.xrowslideshow .forward
+{
+    background-image: url(../images/arrow-right.svg);
+}
