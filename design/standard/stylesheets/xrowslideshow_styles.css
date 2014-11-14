@@ -32,11 +32,36 @@
     width: 10000%;
 }
 
-.xrowslideshow > div a
+.xrowslideshow > div .slide
 {
     display: block;
     float: left;
     width: 0.25%;
+}
+
+.xrowslideshow .indicator
+{
+    position: absolute;
+    width: 100%;
+}
+
+.xrowslideshow .indicator span
+{
+    background-color: #606060;
+    color: #fff;
+    display: block;
+    width: 18px;
+    float: left;
+    height: 18px;
+    line-height: 18px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.xrowslideshow .indicator span.active
+{
+    background-color: #eee;
+    color: #606060;
 }
 
 .xrowslideshow
@@ -51,9 +76,10 @@
     background-repeat: no-repeat;
     border: none;
     cursor: pointer;
-    width: 45px;
     height: 110px;
     filter: none !important;
+    width: 45px;
+    z-index: 1;
 }
 
 .xrowslideshow .backward

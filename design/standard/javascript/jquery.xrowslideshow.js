@@ -1,35 +1,42 @@
 (function ( $ ) {
     jQuery.fn.reverse = [].reverse;
-    $.fn.xrowslideshow = function( options ) {
+    jQuery.fn.xrowslideshow = function( options ) {
         return this.each(function() {
             var settings = $.extend({
-                    slider_viewport: ".viewport", //viewport for your gallery
-                    item_container: "a",//wrapper of gallery item
-                    speed: 500,       //animation speed in milliseconds
-                    items_to_show: 1 //maximum how many items are visible at once in the viewport
+                    slider_viewport: ".viewport",//viewport for your gallery
+                    item_container: "a",        //wrapper of gallery item
+                    resize_flip_buttons: true, //forward/backward buttons are as high as their parent
+                    animation_interval: 5000, //animation interval in milliseconds (needs playbutton enabled)
+                    speed: 500,              //animation speed in milliseconds
+                    max_visible: 1,         //maximum items that are visible at once in the viewport
+                    indicator: false,      //#indicator:false|true
+                    autostart: false     //automatic animation #autostart:true|false
                     }, options );
-
             $(this).children(settings.slider_viewport).wrapInner("<div></div>");
             $(this).data( "index", parseInt(0) );
+            $(this).find(settings.item_container).addClass("slide");
+            $(this).css({"width": $(this).css("width")});//fix for item_container with relative size
             var outer_wrapper = $(this),
                 viewport_object = outer_wrapper.children(settings.slider_viewport),
                 animation_wrapper = viewport_object.children("div"),
                 width = $(viewport_object).find(settings.item_container).outerWidth(),
                 current_index = parseInt(outer_wrapper.data( "index" )),
                 itemcount = parseInt( viewport_object.find(animation_wrapper).find(settings.item_container).length ),
-                offsetleft = "-" + parseFloat( settings.items_to_show * width );
-
-            if( itemcount > settings.items_to_show )
+                offsetleft = "-" + parseFloat( settings.max_visible * width );
+            if( itemcount > settings.max_visible )
             {
                 viewport_object.before('<span class="interaction"><span class="backward"></span><span class="forward"></span></span>');
-                outer_wrapper.find(".forward, .backward").css({"height": viewport_object.outerHeight(true) + "px"});
+                if( settings.resize_flip_buttons == true )
+                {
+                    outer_wrapper.find(".forward, .backward").css({"height": viewport_object.find(settings.item_container).outerHeight(true) + "px"});
+                }
                 $(animation_wrapper).css({left: offsetleft + "px"});
                 viewport_object.find(settings.item_container).each(function(){
-                    if( $(this).index() <= parseInt( settings.items_to_show - 1 ) )
+                    if( $(this).index() <= parseInt( settings.max_visible - 1 ) )
                     {
                         $(this).addClass("appendright");
                     }
-                    if ( $(this).index() >= parseInt(itemcount - settings.items_to_show ) )
+                    if ( $(this).index() >= parseInt(itemcount - settings.max_visible ) )
                     {
                         $(this).addClass("appendleft");
                     }
@@ -47,45 +54,94 @@
 
                 outer_wrapper.find(".appendleft").removeClass("appendleft");
                 outer_wrapper.find(".appendright").removeClass("appendright");
-                
+
+                if( settings.indicator == true)
+                {
+                    outer_wrapper.find(".interaction").append('<span class="indicator"></span>');
+                    var indicator = outer_wrapper.find(".indicator");
+                    indicator.append('<span class="active" data-index="0"></span>');
+                    for (i=2; i <= itemcount; i++) {
+                        indicator.append('<span data-index="'+parseInt(i-1)+'"></span>');
+                    }
+                    indicator.find("span").click(function(){
+                        if( !$(animation_wrapper).is(":animated") )
+                        {
+                            $(this).addClass("active").siblings().removeClass("active");
+                            $(animation_wrapper).animate({left: parseInt(width * -1 * ( $(this).data("index") + (settings.max_visible * 2) - 1 )) + "px"}, settings.speed);
+                            $(outer_wrapper).data("index", $(this).data("index"));
+                        }
+                    });
+                }
+                if( settings.autostart == true )
+                {
+                    var autostart;
+                    autostart = setInterval(function(){
+                        $(animation_wrapper).animate({left: parseInt(width * -1 * ( $(outer_wrapper).data("index") + (settings.max_visible * 2) )) + "px"}, settings.speed, function(){
+                            $(outer_wrapper).data("index", parseInt( $(outer_wrapper).data("index") + 1 ) );
+                            if ( $(outer_wrapper).data("index") == itemcount )
+                            {
+                                $(outer_wrapper).data("index",  parseInt(0));
+                                $(animation_wrapper).css({left: parseInt(width * -1 * settings.max_visible ) + "px"});
+                            }
+                            if( settings.indicator == true)
+                            {
+                                indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
+                            }
+                        });
+                    }, settings.animation_interval);
+                    outer_wrapper.find(".interaction span").click(function(){
+                        clearInterval(autostart);
+                    });
+                }
                 $(outer_wrapper).find(".forward, .backward").mousedown(function(){
-
                     posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
-
                     if( !$(animation_wrapper).is(":animated") && $(this).hasClass("forward") )
                     {
-                        current_index = parseInt(current_index + 1);
+                        $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) + 1));
                         var left = parseInt( posleft - width );
-                        $(outer_wrapper).data( "index",  current_index);
                         $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
-                            if ( current_index == itemcount )
+                            if ( $(outer_wrapper).data("index") == itemcount )
                             {
-                                $(animation_wrapper).css({left: parseInt(width * -1 * settings.items_to_show) + "px"});
-                                current_index = parseInt(0);
-                                $(outer_wrapper).data( "index",  current_index);
+                                $(animation_wrapper).css({left: parseInt(width * -1 * settings.max_visible) + "px"});
+                                $(outer_wrapper).data("index", parseInt(0));
+                            }
+                            if( settings.indicator != false )
+                            {
+                                indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
                             }
                         });
                     }
                     else if( !$(animation_wrapper).is(":animated") )
                     {
-                        current_index = parseInt(current_index - 1);
+                        $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) - 1) );
                         var left = parseInt(posleft + width);
-                        $(outer_wrapper).data( "index", current_index );
                         $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
-                            if ( current_index == "-1")
+                            if ( $(outer_wrapper).data("index") == "-1")
                             {
-                                $(animation_wrapper).css({left: parseInt((itemcount + settings.items_to_show - 1) * width * -1 ) + "px"});
-                                current_index = parseInt(itemcount - 1);
-                                $(outer_wrapper).data( "index",  current_index);
+                                $(animation_wrapper).css({left: parseInt((itemcount + settings.max_visible - 1) * width * -1 ) + "px"});
+                                $(outer_wrapper).data("index",  parseInt(itemcount - 1));
+                            }
+                            if( settings.indicator != false )
+                            {
+                                indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
                             }
                         });
                     }
                 });
+                var resizetimer;
                 $(window).resize(function(){
-                    width = $(viewport_object).find(settings.item_container).outerWidth();
-                    offsetleft = "-" + parseFloat( (settings.items_to_show + $(outer_wrapper).data( "index" )) * width );
+                    outer_wrapper.removeAttr("style");
+                    width = viewport_object.find(settings.item_container).outerWidth();
+                    offsetleft = "-" + parseFloat( (settings.max_visible + $(outer_wrapper).data( "index" )) * width );
                     $(animation_wrapper).css({left: offsetleft + "px"});
-                    outer_wrapper.find(".forward, .backward").css({"height": viewport_object.outerHeight(true) + "px"});
+                    if( settings.resize_flip_buttons == true )
+                    {
+                        outer_wrapper.find(".forward, .backward").css({"height": viewport_object.find(settings.item_container).outerHeight(true) + "px"});
+                    }
+                    clearTimeout(resizetimer);
+                    resizetimer = setTimeout(function(){
+                        outer_wrapper.css({"width": outer_wrapper.css("width")}); //fix for item_container with relative size (needs to be fired after resize)
+                    }, 100);
                 });
             }
         });
