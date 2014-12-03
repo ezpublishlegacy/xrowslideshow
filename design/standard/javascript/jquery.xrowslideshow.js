@@ -10,7 +10,8 @@
                     speed: 500,              //animation speed in milliseconds
                     max_visible: 1,         //maximum items that are visible at once in the viewport
                     indicator: false,      //#indicator:false|true
-                    autostart: false     //automatic animation #autostart:true|false
+                    autostart: false,     //automatic animation #autostart:true|false
+                    show_flip_buttons: true //show/hide forward/backward buttons #show_flip_buttons: false|true
                     }, options );
             $(this).children(settings.slider_viewport).wrapInner("<div></div>");
             $(this).data( "index", parseInt(0) );
@@ -25,10 +26,13 @@
                 offsetleft = "-" + parseFloat( settings.max_visible * width );
             if( itemcount > settings.max_visible )
             {
-                viewport_object.before('<span class="interaction"><span class="backward"></span><span class="forward"></span></span>');
-                if( settings.resize_flip_buttons == true )
+                if (settings.show_flip_buttons == true)
                 {
-                    outer_wrapper.find(".forward, .backward").css({"height": viewport_object.find(settings.item_container).outerHeight(true) + "px"});
+                    viewport_object.before('<span class="interaction"><span class="backward"></span><span class="forward"></span></span>');
+                    if( settings.resize_flip_buttons == true )
+                    {
+                        outer_wrapper.find(".forward, .backward").css({"height": viewport_object.find(settings.item_container).outerHeight(true) + "px"});
+                    }
                 }
                 $(animation_wrapper).css({left: offsetleft + "px"});
                 viewport_object.find(settings.item_container).each(function(){
@@ -93,48 +97,51 @@
                         clearInterval(autostart);
                     });
                 }
-                $(outer_wrapper).find(".forward, .backward").mousedown(function(){
-                    posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
-                    if( !$(animation_wrapper).is(":animated") && $(this).hasClass("forward") )
-                    {
-                        $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) + 1));
-                        var left = parseInt( posleft - width );
-                        $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
-                            if ( $(outer_wrapper).data("index") == itemcount )
-                            {
-                                $(animation_wrapper).css({left: parseInt(width * -1 * settings.max_visible) + "px"});
-                                $(outer_wrapper).data("index", parseInt(0));
-                            }
-                            if( settings.indicator != false )
-                            {
-                                indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
-                            }
-                        });
-                    }
-                    else if( !$(animation_wrapper).is(":animated") )
-                    {
-                        $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) - 1) );
-                        var left = parseInt(posleft + width);
-                        $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
-                            if ( $(outer_wrapper).data("index") == "-1")
-                            {
-                                $(animation_wrapper).css({left: parseInt((itemcount + settings.max_visible - 1) * width * -1 ) + "px"});
-                                $(outer_wrapper).data("index",  parseInt(itemcount - 1));
-                            }
-                            if( settings.indicator != false )
-                            {
-                                indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
-                            }
-                        });
-                    }
-                });
+                if (settings.show_flip_buttons == true)
+                {
+                    $(outer_wrapper).find(".forward, .backward").mousedown(function(){
+                        posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+                        if( !$(animation_wrapper).is(":animated") && $(this).hasClass("forward") )
+                        {
+                            $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) + 1));
+                            var left = parseInt( posleft - width );
+                            $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
+                                if ( $(outer_wrapper).data("index") == itemcount )
+                                {
+                                    $(animation_wrapper).css({left: parseInt(width * -1 * settings.max_visible) + "px"});
+                                    $(outer_wrapper).data("index", parseInt(0));
+                                }
+                                if( settings.indicator != false )
+                                {
+                                    indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
+                                }
+                            });
+                        }
+                        else if( !$(animation_wrapper).is(":animated") )
+                        {
+                            $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) - 1) );
+                            var left = parseInt(posleft + width);
+                            $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
+                                if ( $(outer_wrapper).data("index") == "-1")
+                                {
+                                    $(animation_wrapper).css({left: parseInt((itemcount + settings.max_visible - 1) * width * -1 ) + "px"});
+                                    $(outer_wrapper).data("index",  parseInt(itemcount - 1));
+                                }
+                                if( settings.indicator != false )
+                                {
+                                    indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
+                                }
+                            });
+                        }
+                    });
+                }
                 var resizetimer;
                 $(window).resize(function(){
                     outer_wrapper.removeAttr("style");
                     width = viewport_object.find(settings.item_container).outerWidth();
                     offsetleft = "-" + parseFloat( (settings.max_visible + $(outer_wrapper).data( "index" )) * width );
                     $(animation_wrapper).css({left: offsetleft + "px"});
-                    if( settings.resize_flip_buttons == true )
+                    if( settings.resize_flip_buttons == true && settings.show_flip_buttons == true)
                     {
                         outer_wrapper.find(".forward, .backward").css({"height": viewport_object.find(settings.item_container).outerHeight(true) + "px"});
                     }
