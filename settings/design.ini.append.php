@@ -8,7 +8,7 @@ DesignExtensions[]=xrowslideshow
 FrontendJavaScriptList[]=jquery.xrowslideshow.js
 
 [StylesheetSettings]
-FrontendCSSFileList[]=xrowslideshow_styles.css
-FrontendCSSFileList[]=xrowslideshow_responsive.css
+#FrontendCSSFileList[]=xrowslideshow_styles.css
+#FrontendCSSFileList[]=xrowslideshow_responsive.css
 
 */ ?>
