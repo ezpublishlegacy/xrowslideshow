@@ -151,6 +151,10 @@
                     }, 100);
                 });
             }
+            else
+            {
+                outer_wrapper.removeAttr("style");
+            }
         });
     };
 }( jQuery ));
