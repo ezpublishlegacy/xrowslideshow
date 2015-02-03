@@ -96,13 +96,37 @@
                     outer_wrapper.find(".interaction span").click(function(){
                         clearInterval(autostart);
                     });
-                }
+                } 
+                $(outer_wrapper).find(".viewport").on( "swipeleft", function (){
+                    posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+                 
+                    slideleft();
+                });
+                       
+                $(outer_wrapper).find(".viewport").on( "swiperight", function (){
+                    posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+   
+                    slideright();
+                });  
+                
+                
+                
                 if (settings.show_flip_buttons == true)
                 {
                     $(outer_wrapper).find(".forward, .backward").mousedown(function(){
                         posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
                         if( !$(animation_wrapper).is(":animated") && $(this).hasClass("forward") )
                         {
+                        slideleft();
+                        }
+                        else if( !$(animation_wrapper).is(":animated") )
+                        {
+                        slideright();
+                        }
+                    });
+                }
+                
+                function slideleft(){
                             $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) + 1));
                             var left = parseInt( posleft - width );
                             $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
@@ -116,9 +140,10 @@
                                     indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
                                 }
                             });
-                        }
-                        else if( !$(animation_wrapper).is(":animated") )
-                        {
+                
+                }
+                
+                function slideright(){
                             $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) - 1) );
                             var left = parseInt(posleft + width);
                             $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
@@ -132,9 +157,9 @@
                                     indicator.find('span[data-index="'+ $(outer_wrapper).data('index') +'"]').addClass("active").siblings().removeClass("active");
                                 }
                             });
-                        }
-                    });
                 }
+                
+                
                 var resizetimer;
                 $(window).resize(function(){
                     outer_wrapper.removeAttr("style");
