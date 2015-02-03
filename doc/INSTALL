@@ -1,10 +1,10 @@
+DEPENDENCY
+
+* jquery mobile
+* http://jquerymobile.com/   
+* only widget swipe 
 
 INSTALL EXTENSION
-
-Dependency
-
-jquery mobile
-http://jquerymobile.com/
 
 * get extension from github
 * place it in your /extension directory or /ezpublish_legacy/extension
