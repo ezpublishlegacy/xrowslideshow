@@ -8,6 +8,7 @@
                     resize_flip_buttons: true, //forward/backward buttons are as high as their parent
                     animation_interval: 5000, //animation interval in milliseconds (needs playbutton enabled)
                     speed: 500,              //animation speed in milliseconds
+                    speedforswipe: 100,     //animation Swipespeed in milliseconds
                     max_visible: 1,         //maximum items that are visible at once in the viewport
                     indicator: false,      //#indicator:false|true
                     autostart: false,     //automatic animation #autostart:true|false
@@ -96,20 +97,29 @@
                     outer_wrapper.find(".interaction span").click(function(){
                         clearInterval(autostart);
                     });
-                } 
-                $(outer_wrapper).find(".viewport").on( "swipeleft", function (){
-                    posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
-                 
-                    slideleft();
-                });
-                       
-                $(outer_wrapper).find(".viewport").on( "swiperight", function (){
-                    posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
-   
-                    slideright();
-                });  
-                
-                
+                    
+                    outer_wrapper.find(".viewport").on( "swipeleft", function (){
+                        clearInterval(autostart);
+                        posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+                        slideleft();
+                    });
+                    
+                    outer_wrapper.find(".viewport").on( "swiperight", function (){
+                        clearInterval(autostart);
+                        posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+                        slideright();
+                    });
+                }else{
+                    $(outer_wrapper).find(".viewport").on( "swipeleft", function (){
+                        posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+                        slideleft();
+                    });
+                    
+                    $(outer_wrapper).find(".viewport").on( "swiperight", function (){
+                        posleft = parseInt( $(animation_wrapper).css("left").split("px")[0] );
+                        slideright();
+                    });
+                }
                 
                 if (settings.show_flip_buttons == true)
                 {
@@ -129,7 +139,7 @@
                 function slideleft(){
                             $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) + 1));
                             var left = parseInt( posleft - width );
-                            $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
+                            $(animation_wrapper).animate({left: left + "px"}, settings.speedforswipe, function(){
                                 if ( $(outer_wrapper).data("index") == itemcount )
                                 {
                                     $(animation_wrapper).css({left: parseInt(width * -1 * settings.max_visible) + "px"});
@@ -146,7 +156,7 @@
                 function slideright(){
                             $(outer_wrapper).data( "index", parseInt($(outer_wrapper).data( "index" ) - 1) );
                             var left = parseInt(posleft + width);
-                            $(animation_wrapper).animate({left: left + "px"}, settings.speed, function(){
+                            $(animation_wrapper).animate({left: left + "px"}, settings.speedforswipe, function(){
                                 if ( $(outer_wrapper).data("index") == "-1")
                                 {
                                     $(animation_wrapper).css({left: parseInt((itemcount + settings.max_visible - 1) * width * -1 ) + "px"});
