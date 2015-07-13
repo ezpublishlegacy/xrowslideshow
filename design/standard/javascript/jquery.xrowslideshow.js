@@ -25,7 +25,7 @@
                 current_index = parseInt(outer_wrapper.data( "index" )),
                 itemcount = parseInt( viewport_object.find(animation_wrapper).find(settings.item_container).length ),
                 offsetleft = "-" + parseFloat( settings.max_visible * width );
-            if( itemcount > settings.max_visible )
+            if( itemcount > parseInt(1) )
             {
                 if (settings.show_flip_buttons == true)
                 {
