@@ -17,7 +17,8 @@
             $(this).children(settings.slider_viewport).wrapInner("<div></div>");
             $(this).data( "index", parseInt(0) );
             $(this).find(settings.item_container).addClass("slide");
-            $(this).css({"width": $(this).css("width")});//fix for item_container with relative size
+            //$(this).css({"width": $(this).css("width")});//fix for item_container with relative size
+            $(this).find(settings.item_container).css({"width": $(this).find(settings.item_container).css("width")});//fix for item_container with relative size
             var outer_wrapper = $(this),
                 viewport_object = outer_wrapper.children(settings.slider_viewport),
                 animation_wrapper = viewport_object.children("div"),
